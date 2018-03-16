@@ -50,7 +50,10 @@ def task_c(results, column=7, element_type="date", sort_type="ASC"):
     #print(len(results))
     #print(results[1][column-1])
     if element_type is "date":
-        sorted(results, key=lambda x: datetime.strptime(x[column-1], "%Y-%m-%d"))
+        results = sorted(results, key=lambda x: datetime.strptime(x[column-1], '%Y-%m-%d'), reverse=0)
+    #for line in results:
+        #print(line)
+    return results
 
 
 def task_d(results, header, column1=8, column2=22):
@@ -76,10 +79,9 @@ read_file(data)
 header = task_a(header)
 #print(header)
 task_b(data, results)
-task_c(results)
-#task_d(results, header, 8, 22)
+results = task_c(results, 7)
+task_d(results, header, 8, 22)
 write_file(results, header)
-for rez_line in data:
+for rez_line in results:
     print(rez_line)
-
 
