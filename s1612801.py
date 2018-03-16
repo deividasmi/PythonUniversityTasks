@@ -57,11 +57,13 @@ def task_b(data, results, column=2, sort_type="ends", string_part="INC"):
     :param sort_type:
     :param string_part:
     """
-    results.append(data[0])
     for line in data:
         element = line[column - 1]
         if sort_type is "ends":
             if element[len(element)-3:] == string_part:
+                results.append(line)
+        else:
+            if element[0:3] == string_part:
                 results.append(line)
 
 
@@ -74,12 +76,21 @@ def task_c(results, column=7, element_type="date", sort_type="ASC"):
     :param sort_type:
     :return:
     """
-    rev = True
+    reversal = True
     if sort_type == "ASC":
-        rev = False
+        reversal = False
     if element_type is "date":
         results = sorted(results, key=lambda x: datetime.strptime(x[column-1], '%Y-%m-%d'),
-                         reverse=rev)
+                         reverse=reversal)
+    elif element_type is "float":
+        results = sorted(results, key=lambda x: float('-inf') if x[column-1] == ""
+            else float(x[column-1]), reverse=reversal)
+    elif element_type is "int":
+        results = sorted(results, key=lambda x: int('-inf') if x[column - 1] == ""
+            else int(x[column - 1]), reverse=reversal)
+    else:
+        results = sorted(results, key=lambda x: x[column-1], reverse=reversal)
+
     return results
 
 
@@ -96,28 +107,35 @@ def task_d(results, header, column1=8, column2=22):
         lines[column1 - 1], lines[column2 - 1] = lines[column2 - 1], lines[column1 - 1]
 
 
-def write_file(results, header, results_file):
+def write_file(results, header, results_file, symbol="tab"):
     """
     writes results into file
+    :param symbol:
     :param results_file:
     :param results:
     :param header:
     """
-    rez_file = open(results_file, "w")
-    rez_file.write('\t'.join(header))
-    rez_file.write('\n')
-    for line in results:
-        rez_file.write('\t'.join(line))
+    if symbol == "tab":
+        rez_file = open(results_file, "w")
+        rez_file.write('\t'.join(header))
         rez_file.write('\n')
+        for line in results:
+            rez_file.write('\t'.join(line))
+            rez_file.write('\n')
+    else:
+        rez_file = open(results_file, "w")
+        rez_file.write(symbol.join(header))
+        rez_file.write('\n')
+        for line in results:
+            rez_file.write(symbol.join(line))
+            rez_file.write('\n')
     rez_file.close()
 
 
 HEADER = read_header(DATA_FILE)
 read_file(DATA, DATA_FILE)
 HEADER = task_a(HEADER)
-task_b(DATA, RESULTS)
-RESULTS = task_c(RESULTS, 7)
-task_d(RESULTS, HEADER, 8, 22)
+task_b(DATA, RESULTS, 3, "ends", "TER")
+RESULTS = task_c(RESULTS, 5, "float", "DEC")
+task_d(RESULTS, HEADER, 9, 22)
 write_file(RESULTS, HEADER, RESULTS_FILE)
-
-
