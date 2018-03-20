@@ -80,14 +80,14 @@ def task_c(results, column=7, element_type="date", sort_type="ASC"):
     if sort_type == "ASC":
         reversal = False
     if element_type is "date":
-        results = sorted(results, key=lambda x: datetime.strptime(x[column-1], '%Y-%m-%d'),
+        results = sorted(results, key=lambda x: datetime.strptime(x[column-1], '%Y-%m-%d'), \
                          reverse=reversal)
     elif element_type is "float":
-        results = sorted(results, key=lambda x: float('-inf') if x[column-1] == ""
-            else float(x[column-1]), reverse=reversal)
+        results = sorted(results, key=lambda x: float('-inf') if x[column-1] == "" \
+                        else float(x[column-1]), reverse=reversal)
     elif element_type is "int":
-        results = sorted(results, key=lambda x: int('-inf') if x[column - 1] == ""
-            else int(x[column - 1]), reverse=reversal)
+        results = sorted(results, key=lambda x: int('-inf') if x[column - 1] == "" \
+                         else int(x[column - 1]), reverse=reversal)
     else:
         results = sorted(results, key=lambda x: x[column-1], reverse=reversal)
 

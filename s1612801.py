@@ -84,10 +84,10 @@ def task_c(results, column=7, element_type="date", sort_type="ASC"):
                          reverse=reversal)
     elif element_type is "float":
         results = sorted(results, key=lambda x: float('-inf') if x[column-1] == ""
-            else float(x[column-1]), reverse=reversal)
+                         else float(x[column-1]), reverse=reversal)
     elif element_type is "int":
         results = sorted(results, key=lambda x: int('-inf') if x[column - 1] == ""
-            else int(x[column - 1]), reverse=reversal)
+                         else int(x[column - 1]), reverse=reversal)
     else:
         results = sorted(results, key=lambda x: x[column-1], reverse=reversal)
 
@@ -135,7 +135,7 @@ def write_file(results, header, results_file, symbol="tab"):
 HEADER = read_header(DATA_FILE)
 read_file(DATA, DATA_FILE)
 HEADER = task_a(HEADER)
-task_b(DATA, RESULTS, 3, "ends", "TER")
-RESULTS = task_c(RESULTS, 5, "float", "DEC")
-task_d(RESULTS, HEADER, 9, 22)
+task_b(DATA, RESULTS)
+RESULTS = task_c(RESULTS)
+task_d(RESULTS, HEADER)
 write_file(RESULTS, HEADER, RESULTS_FILE)
