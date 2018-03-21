@@ -17,6 +17,7 @@ def read_header(data_file):
     datafile = open(data_file, "r")
     header_string = next(datafile)
     header = header_string.strip().split(',')
+    datafile.close()
     return header
 
 
@@ -33,6 +34,7 @@ def read_file(data, data_file):
         array = line.strip().split(',')
         data.append(array)
     datafile.close()
+    return data
 
 
 def task_a(header):
@@ -43,7 +45,7 @@ def task_a(header):
     """
     temp = []
     for element in header:
-        element = element[:1].upper() + element[1:]
+        element = element.upper()
         temp.append(element)
     return temp
 
@@ -60,10 +62,10 @@ def task_b(data, results, column=2, sort_type="ends", string_part="INC"):
     for line in data:
         element = line[column - 1]
         if sort_type is "ends":
-            if element[len(element)-3:] == string_part:
+            if element.endswith(string_part):
                 results.append(line)
         else:
-            if element[0:3] == string_part:
+            if element.startswith(string_part):
                 results.append(line)
 
 
@@ -86,7 +88,7 @@ def task_c(results, column=7, element_type="date", sort_type="ASC"):
         results = sorted(results, key=lambda x: float('-inf') if x[column-1] == "" \
                         else float(x[column-1]), reverse=reversal)
     elif element_type is "int":
-        results = sorted(results, key=lambda x: int('-inf') if x[column - 1] == "" \
+        results = sorted(results, key=lambda x: float('-inf') if x[column - 1] == "" \
                          else int(x[column - 1]), reverse=reversal)
     else:
         results = sorted(results, key=lambda x: x[column-1], reverse=reversal)
@@ -133,7 +135,7 @@ def write_file(results, header, results_file, symbol="tab"):
 
 
 HEADER = read_header(DATA_FILE)
-read_file(DATA, DATA_FILE)
+DATA = read_file(DATA, DATA_FILE)
 HEADER = task_a(HEADER)
 task_b(DATA, RESULTS, int(sys.argv[1]), sys.argv[2], sys.argv[3])
 RESULTS = task_c(RESULTS, int(sys.argv[4]), sys.argv[5], sys.argv[6])
